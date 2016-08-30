@@ -61,7 +61,7 @@ namespace git_repositories_watcher
                                 switch (mi_tmp.Name)
                                 {
                                     case "mi_main":
-                                    case "mi_enter":
+                                    case "mi_commit":
                                         //mi_tmp.Background = System.Windows.Media.Brushes.DarkGray;
                                         mi_tmp.IsEnabled = bool_object_exists;
                                         break;
@@ -147,26 +147,25 @@ namespace git_repositories_watcher
                     Grid.SetColumn(mi_clipboard, 1);
                     Grid.SetRow(mi_clipboard, 0);
                     mi_grid.Children.Add(mi_clipboard);
+                    //*/
 
-                    MenuItem mi_enter = new MenuItem()
+                    //*
+                    MenuItem mi_commit = new MenuItem()
                     {
-                        Name = "mi_enter"
+                        Name = "mi_commit"
                     };
-                    mi_enter.Icon = new System.Windows.Controls.Image
+                    mi_commit.Icon = new System.Windows.Controls.Image
                     {
                         Source = new BitmapImage(
-                        new Uri("pack://application:,,,/icons/Enter.ico"))
+                        new Uri("pack://application:,,,/icons/commit.ico"))
                     };
-                    // Если объект удалён, то нельзя его выполнить
-                    if (_e.ChangeType != WatcherChangeTypes.Deleted)
-                    {
-                        mi_enter.ToolTip = "Execute file";
-                        mi_enter.Command = App.CustomRoutedCommand_ExecuteFile;
-                        mi_enter.CommandParameter = new Path_ObjectType(_e.FullPath, wType);
-                    }
-                    Grid.SetColumn(mi_enter, 2);
-                    Grid.SetRow(mi_enter, 0);
-                    mi_grid.Children.Add(mi_enter);
+                    mi_commit.ToolTip = "Execute file";
+                    mi_commit.Command = App.CustomRoutedCommand_ExecuteFile;
+                    mi_commit.CommandParameter = this.repository_path;
+
+                    Grid.SetColumn(mi_commit, 2);
+                    Grid.SetRow(mi_commit, 0);
+                    mi_grid.Children.Add(mi_commit);
                     //*/
 
                     Grid.SetColumn(mi, 0);

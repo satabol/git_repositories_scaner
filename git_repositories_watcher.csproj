@@ -142,6 +142,9 @@
   <ItemGroup>
     <Resource Include="icons\not_exist.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\commit.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>

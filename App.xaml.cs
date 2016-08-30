@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -88,10 +89,14 @@ namespace git_repositories_watcher
         public static RoutedCommand CustomRoutedCommand_ExecuteFile = new RoutedCommand();
         private void ExecutedCustomCommand_ExecuteFile(object sender, ExecutedRoutedEventArgs e)
         {
-            /*
-            //MessageBox.Show("Custom Command Executed: "+ e.Parameter);
-            Path_ObjectType obj = (Path_ObjectType)e.Parameter;
-            Process.Start(obj.path, "");
+            //*
+            string repository_path = (string)e.Parameter;
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+
+            startInfo.WorkingDirectory = repository_path;
+            startInfo.FileName = "TortoiseGitProc.exe";
+            startInfo.Arguments = "/command:commit";
+            Process.Start(startInfo); //, "/command:commit");
             //*/
         }
 
