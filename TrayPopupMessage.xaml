@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="git_repositories_watcher.TrayPopupMessage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:git_repositories_watcher"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             HorizontalAlignment="Right"
+             VerticalAlignment="Bottom" BorderThickness="2" Cursor="Hand" Margin="0" Background="#CC00ABD1" BorderBrush="#FFFFB900"
+             >
+    <UserControl.Effect>
+        <DropShadowEffect Color="#FF898989" ShadowDepth="10" Opacity="0.5"/>
+    </UserControl.Effect>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Image Grid.Column="0" Grid.Row="0" Source="icons/git_icon.ico"></Image>
+        <TextBlock Grid.Column="1" Grid.Row="0" x:Name="title" Foreground="White" MaxWidth="300" HorizontalAlignment="Stretch" TextWrapping="Wrap" Padding="0" FontSize="14" Background="#FF00C158" FontWeight="Bold">Message:</TextBlock>
+        <Button Grid.Column="4" Grid.Row="0" ToolTip="Close popup" x:Name="btn_close_window" Width="20" Click="btn_close_window_Click">
+            <Image Source="icons/close.ico" Width="20"></Image>
+        </Button>
+        <TextBlock Grid.Column="1" Grid.Row="1" x:Name="text_message" MinHeight="100" MinWidth="200" Foreground="White" MaxWidth="300" HorizontalAlignment="Center" VerticalAlignment="top" TextWrapping="Wrap" Padding="5" FontSize="14">test</TextBlock>
+    </Grid>
+</UserControl>

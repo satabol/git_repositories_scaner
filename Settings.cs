@@ -9,5 +9,6 @@ namespace git_repositories_watcher
     public class Settings
     {
         public IList<string> Paths { get; set; }
+        string Version { get; set; }
     }
 }

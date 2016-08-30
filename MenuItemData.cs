@@ -90,27 +90,31 @@ namespace git_repositories_watcher
                 bool_object_exists = true;
             }
 
+            mi.Command = App.CustomRoutedCommand_GotoFolderExplorer;
+            mi.CommandParameter = repository_path;
+
             if (bool_object_exists == true)
             {
-                Repository repo = new Repository(repository_path);
-                RepositoryStatus repositoryStatus = repo.RetrieveStatus();
-                bool isDirty = repositoryStatus.IsDirty;
-
-                if (isDirty == false)
+                try
                 {
-                    mi.Icon = new System.Windows.Controls.Image { Source = new BitmapImage(new Uri("pack://application:,,,/icons/NormalIcon.ico", UriKind.Absolute)) };
-                }
-                else
-                {
-                    mi.Icon = new System.Windows.Controls.Image { Source = new BitmapImage(new Uri("pack://application:,,,/icons/ModifiedIcon.ico", UriKind.Absolute)) };
-                }
+                    Repository repo = new Repository(repository_path);
+                    RepositoryStatus repositoryStatus = repo.RetrieveStatus();
+                    bool isDirty = repositoryStatus.IsDirty;
 
-                mi.Command = App.CustomRoutedCommand_GotoFolderExplorer;
-                mi.CommandParameter = repository_path;
+                    if (isDirty == false)
+                    {
+                        mi.Icon = new System.Windows.Controls.Image { Source = new BitmapImage(new Uri("pack://application:,,,/icons/NormalIcon.ico", UriKind.Absolute)) };
+                    }
+                    else
+                    {
+                        mi.Icon = new System.Windows.Controls.Image { Source = new BitmapImage(new Uri("pack://application:,,,/icons/ModifiedIcon.ico", UriKind.Absolute)) };
+                    }
 
-                {
-                    // Так определять Grid гораздо проще: http://stackoverflow.com/questions/5755455/how-to-set-control-template-in-code
-                    string str_template = @"
+                    mi.ToolTip = "open path";
+
+                    {
+                        // Так определять Grid гораздо проще: http://stackoverflow.com/questions/5755455/how-to-set-control-template-in-code
+                        string str_template = @"
                             <ControlTemplate 
                                                 xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
                                                 xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'
@@ -126,61 +130,67 @@ namespace git_repositories_watcher
                                 </Grid>
                             </ControlTemplate>
                         ";
-                    MenuItem _mi = new MenuItem();
-                    Grid mi_grid = null; // new Grid();
-                    ControlTemplate ct = (ControlTemplate)XamlReader.Parse(str_template);
-                    _mi.Template = ct;
-                    if (_mi.ApplyTemplate())
-                    {
-                        mi_grid = (Grid)ct.FindName("mi_grid", _mi);
+                        MenuItem _mi = new MenuItem();
+                        Grid mi_grid = null; // new Grid();
+                        ControlTemplate ct = (ControlTemplate)XamlReader.Parse(str_template);
+                        _mi.Template = ct;
+                        if (_mi.ApplyTemplate())
+                        {
+                            mi_grid = (Grid)ct.FindName("mi_grid", _mi);
+                        }
+                        /*
+                        MenuItem mi_clipboard = new MenuItem()
+                        {
+                            Name = "mi_clipboard"
+                        };
+                        mi_clipboard.Icon = new System.Windows.Controls.Image
+                        {
+                            Source = new BitmapImage(
+                            new Uri("pack://application:,,,/Icons/Clipboard.ico"))
+                        };
+                        mi_clipboard.ToolTip = "Copy path to clipboard";
+                        mi_clipboard.Command = App.CustomRoutedCommand_CopyTextToClipboard;
+                        mi_clipboard.CommandParameter = _e.FullPath;
+                        Grid.SetColumn(mi_clipboard, 1);
+                        Grid.SetRow(mi_clipboard, 0);
+                        mi_grid.Children.Add(mi_clipboard);
+                        //*/
+
+                        //*
+                        MenuItem mi_commit = new MenuItem()
+                        {
+                            Name = "mi_commit"
+                        };
+                        mi_commit.Icon = new System.Windows.Controls.Image
+                        {
+                            Source = new BitmapImage(
+                            new Uri("pack://application:,,,/icons/commit.ico"))
+                        };
+                        mi_commit.ToolTip = "Execute TortoiseGitProc.exe /command:commit";
+                        mi_commit.Command = App.CustomRoutedCommand_TortoiseGitProc;
+                        mi_commit.CommandParameter = this.repository_path;
+
+                        Grid.SetColumn(mi_commit, 2);
+                        Grid.SetRow(mi_commit, 0);
+                        mi_grid.Children.Add(mi_commit);
+                        //*/
+
+                        Grid.SetColumn(mi, 0);
+                        Grid.SetRow(mi, 0);
+                        mi_grid.Children.Add(mi);
+                        mi = _mi;
                     }
-                    /*
-                    MenuItem mi_clipboard = new MenuItem()
-                    {
-                        Name = "mi_clipboard"
-                    };
-                    mi_clipboard.Icon = new System.Windows.Controls.Image
-                    {
-                        Source = new BitmapImage(
-                        new Uri("pack://application:,,,/Icons/Clipboard.ico"))
-                    };
-                    mi_clipboard.ToolTip = "Copy path to clipboard";
-                    mi_clipboard.Command = App.CustomRoutedCommand_CopyTextToClipboard;
-                    mi_clipboard.CommandParameter = _e.FullPath;
-                    Grid.SetColumn(mi_clipboard, 1);
-                    Grid.SetRow(mi_clipboard, 0);
-                    mi_grid.Children.Add(mi_clipboard);
-                    //*/
-
-                    //*
-                    MenuItem mi_commit = new MenuItem()
-                    {
-                        Name = "mi_commit"
-                    };
-                    mi_commit.Icon = new System.Windows.Controls.Image
-                    {
-                        Source = new BitmapImage(
-                        new Uri("pack://application:,,,/icons/commit.ico"))
-                    };
-                    mi_commit.ToolTip = "Execute TortoiseGitProc.exe /command:commit";
-                    mi_commit.Command = App.CustomRoutedCommand_TortoiseGitProc;
-                    mi_commit.CommandParameter = this.repository_path;
-
-                    Grid.SetColumn(mi_commit, 2);
-                    Grid.SetRow(mi_commit, 0);
-                    mi_grid.Children.Add(mi_commit);
-                    //*/
-
-                    Grid.SetColumn(mi, 0);
-                    Grid.SetRow(mi, 0);
-                    mi_grid.Children.Add(mi);
-                    mi = _mi;
+                }
+                catch( Exception _ex)
+                {
+                    mi.Icon = new System.Windows.Controls.Image { Source = new BitmapImage(new Uri("pack://application:,,,/icons/delete_icon.ico", UriKind.Absolute)) };
+                    mi.ToolTip = "Exception: "+_ex.Message;
                 }
             }
             else
             {
-                mi.Icon = new System.Windows.Controls.Image { Source = new BitmapImage(new Uri("pack://application:,,,/icons/not_exist.ico", UriKind.Absolute)) };
-                mi.IsEnabled = false;
+                mi.Icon = new System.Windows.Controls.Image { Source = new BitmapImage(new Uri("pack://application:,,,/icons/delete_icon.ico", UriKind.Absolute)) };
+                mi.ToolTip = "Path do not exist.";
             }
             return;
         }

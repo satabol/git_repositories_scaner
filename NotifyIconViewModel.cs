@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Hardcodet.Wpf.TaskbarNotification;
+using System.Windows.Controls.Primitives;
 
 namespace git_repositories_watcher
 {
@@ -30,6 +31,7 @@ namespace git_repositories_watcher
                 //return new DelegateCommand { CommandAction = () => { Application.Current.Shutdown(); } };
                 return new DelegateCommand { CommandAction = () => {
                     App.reloadContextMenu();
+
                     //App.NotifyIcon.ContextMenu.Visibility = System.Windows.Visibility.Visible;
                     //MethodInfo mi = typeof(Hardcodet.Wpf.TaskbarNotification.TaskbarIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic);
                     //mi.Invoke(App.NotifyIcon, null);

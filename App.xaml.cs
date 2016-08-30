@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
@@ -38,13 +39,14 @@ namespace git_repositories_watcher
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
             _notifyIcon = (TaskbarIcon)Application.Current.FindResource("NotifyIcon");
+            reloadContextMenu();
+
 
             _notifyIcon.ContextMenu.CommandBindings.Add(new CommandBinding(CustomRoutedCommand_ExecuteFile, ExecutedCustomRoutedCommand_ExecuteFile, CanExecuteCustomCommand));
             _notifyIcon.ContextMenu.CommandBindings.Add(new CommandBinding(CustomRoutedCommand_TortoiseGitProc, ExecutedCustomRoutedCommand_TortoiseGitProc, CanExecuteCustomCommand));
             _notifyIcon.ContextMenu.CommandBindings.Add(new CommandBinding(CustomRoutedCommand_GotoFolderExplorer, CustomRoutedCommand_ExecuteGotoFolderExplorer, CanExecuteCustomCommand));
-
-            reloadContextMenu();
         }
 
         // Перезагрузка контекстного меню вместе с настройками программы:
@@ -56,7 +58,8 @@ namespace git_repositories_watcher
             if (File.Exists(settingsFilePath) == false)
             {
                 settings_params = @"{ 
-    paths : []
+    paths : [],
+    version : '0.0'
 }";
                 File.WriteAllText(settingsFilePath, settings_params);
             }
@@ -71,24 +74,26 @@ namespace git_repositories_watcher
                 return;
             }
 
-            Console.WriteLine("Paths.Count=" + settings.Paths.Count);
-
             foreach (MenuItemData item in list_context_menu_items)
             {
                 _notifyIcon.ContextMenu.Items.Remove(item.mi);
             }
             list_context_menu_items.Clear();
 
-            foreach (string path in settings.Paths)
+            foreach (string path in settings.Paths.Reverse() )
             {
-                Repository repo = new Repository(path);
-                RepositoryStatus repositoryStatus = repo.RetrieveStatus();
-                Console.WriteLine(path + ": " + repositoryStatus.IsDirty);
                 MenuItemData menuItemData = new MenuItemData(path);
                 list_context_menu_items.Add(menuItemData);
                 _notifyIcon.ContextMenu.Items.Insert(0, menuItemData.mi);
             }
 
+            string init_text_message = "Repositories reloaded. Open context menu.";
+            TrayPopupMessage popup = new TrayPopupMessage("\n" + init_text_message.ToString(), "Initial initialization", App.NotifyIcon, TrayPopupMessage.ControlButtons.Close);
+            popup.MouseDown += (sender, args) =>
+            {
+                App.NotifyIcon.CustomBalloon.IsOpen = false;
+            };
+            App.NotifyIcon.ShowCustomBalloon(popup, PopupAnimation.Fade, 4000);
         }
 
         private void CanExecuteCustomCommand(object sender, CanExecuteRoutedEventArgs e)
