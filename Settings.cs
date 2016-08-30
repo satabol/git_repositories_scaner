@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace git_repositories_watcher
 {
-    class Settings
+    public class Settings
     {
         public IList<string> Paths { get; set; }
     }

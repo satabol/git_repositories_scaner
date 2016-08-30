@@ -21,6 +21,15 @@ namespace git_repositories_watcher
             }
         }
 
+        public ICommand ReloadRepositoriesCommand
+        {
+            get
+            {
+                //return new DelegateCommand { CommandAction = () => { Application.Current.Shutdown(); } };
+                return new DelegateCommand { CommandAction = () => { App.reloadContextMenu(); } };
+            }
+        }
+
         public ICommand ExitApplicationCommand
         {
             get
