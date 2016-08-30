@@ -40,8 +40,16 @@ namespace git_repositories_watcher
             base.OnStartup(e);
             _notifyIcon = (TaskbarIcon)Application.Current.FindResource("NotifyIcon");
 
-            _notifyIcon.ContextMenu.CommandBindings.Add(new CommandBinding(CustomRoutedCommand_ExecuteFile, ExecutedCustomCommand_ExecuteFile, CanExecuteCustomCommand));
+            _notifyIcon.ContextMenu.CommandBindings.Add(new CommandBinding(CustomRoutedCommand_ExecuteFile, ExecutedCustomRoutedCommand_ExecuteFile, CanExecuteCustomCommand));
+            _notifyIcon.ContextMenu.CommandBindings.Add(new CommandBinding(CustomRoutedCommand_TortoiseGitProc, ExecutedCustomRoutedCommand_TortoiseGitProc, CanExecuteCustomCommand));
+            _notifyIcon.ContextMenu.CommandBindings.Add(new CommandBinding(CustomRoutedCommand_GotoFolderExplorer, CustomRoutedCommand_ExecuteGotoFolderExplorer, CanExecuteCustomCommand));
 
+            reloadContextMenu();
+        }
+
+        // Перезагрузка контекстного меню вместе с настройками программы:
+        public static void reloadContextMenu()
+        {
             String settingsFilePath = getSettingsFilePath();
 
             string settings_params = null;
@@ -53,15 +61,19 @@ namespace git_repositories_watcher
                 File.WriteAllText(settingsFilePath, settings_params);
             }
             settings_params = File.ReadAllText(settingsFilePath);
-            settings = JsonConvert.DeserializeObject<Settings>(settings_params);
+            try
+            {
+                settings = JsonConvert.DeserializeObject<Settings>(settings_params);
+            }
+            catch ( Exception _ex)
+            {
+                MessageBox.Show("Ошибка чтения файла ini:\n" + _ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             Console.WriteLine("Paths.Count=" + settings.Paths.Count);
-            reloadContextMenu();
-        }
 
-        public static void reloadContextMenu()
-        {
-            foreach(MenuItemData item in list_context_menu_items)
+            foreach (MenuItemData item in list_context_menu_items)
             {
                 _notifyIcon.ContextMenu.Items.Remove(item.mi);
             }
@@ -86,8 +98,8 @@ namespace git_repositories_watcher
         }
 
         // Пользовательская команда:
-        public static RoutedCommand CustomRoutedCommand_ExecuteFile = new RoutedCommand();
-        private void ExecutedCustomCommand_ExecuteFile(object sender, ExecutedRoutedEventArgs e)
+        public static RoutedCommand CustomRoutedCommand_TortoiseGitProc = new RoutedCommand();
+        private void ExecutedCustomRoutedCommand_TortoiseGitProc(object sender, ExecutedRoutedEventArgs e)
         {
             //*
             string repository_path = (string)e.Parameter;
@@ -98,6 +110,45 @@ namespace git_repositories_watcher
             startInfo.Arguments = "/command:commit";
             Process.Start(startInfo); //, "/command:commit");
             //*/
+        }
+
+        public static RoutedCommand CustomRoutedCommand_ExecuteFile = new RoutedCommand();
+        private void ExecutedCustomRoutedCommand_ExecuteFile(object sender, ExecutedRoutedEventArgs e)
+        {
+            /*
+            string repository_path = (string)e.Parameter;
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+
+            startInfo.WorkingDirectory = repository_path;
+            startInfo.FileName = "TortoiseGitProc.exe";
+            startInfo.Arguments = "/command:commit";
+            Process.Start(startInfo); //, "/command:commit");
+            //*/
+        }
+
+        public static RoutedCommand CustomRoutedCommand_GotoFolderExplorer = new RoutedCommand();
+        private void CustomRoutedCommand_ExecuteGotoFolderExplorer(object sender, ExecutedRoutedEventArgs e)
+        {
+            //MessageBox.Show("Custom Command Executed: "+ e.Parameter);
+            string folder_path = (string)e.Parameter;
+            gotoPathByWindowsExplorer(folder_path);
+        }
+
+        public static void gotoPathByWindowsExplorer(string _path)
+        {
+            if (Directory.Exists( _path )==true )
+            {
+                Process.Start("explorer.exe", "\"" + _path + "\"");
+            }
+            else if (File.Exists(_path) == true)
+            {
+                Process.Start("explorer.exe", "/select,\"" + _path + "\"");
+            }
+            else
+            {
+                Process.Start("explorer.exe");
+            }
+
         }
 
         // Определить имя файла конфигурации:

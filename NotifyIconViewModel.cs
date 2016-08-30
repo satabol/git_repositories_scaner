@@ -30,6 +30,16 @@ namespace git_repositories_watcher
             }
         }
 
+        public ICommand GotoSettingsFileCommand
+        {
+            get
+            {
+                //return new DelegateCommand { CommandAction = () => { Application.Current.Shutdown(); } };
+                string settings_file_path = App.getSettingsFilePath();
+                return new DelegateCommand { CommandAction = () => { App.gotoPathByWindowsExplorer(settings_file_path); } };
+            }
+        }
+
         public ICommand ExitApplicationCommand
         {
             get

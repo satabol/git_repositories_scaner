@@ -145,6 +145,9 @@
   <ItemGroup>
     <Resource Include="icons\commit.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\settings.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>

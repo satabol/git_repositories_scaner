@@ -105,6 +105,9 @@ namespace git_repositories_watcher
                     mi.Icon = new System.Windows.Controls.Image { Source = new BitmapImage(new Uri("pack://application:,,,/icons/ModifiedIcon.ico", UriKind.Absolute)) };
                 }
 
+                mi.Command = App.CustomRoutedCommand_GotoFolderExplorer;
+                mi.CommandParameter = repository_path;
+
                 {
                     // Так определять Grid гораздо проще: http://stackoverflow.com/questions/5755455/how-to-set-control-template-in-code
                     string str_template = @"
@@ -159,8 +162,8 @@ namespace git_repositories_watcher
                         Source = new BitmapImage(
                         new Uri("pack://application:,,,/icons/commit.ico"))
                     };
-                    mi_commit.ToolTip = "Execute file";
-                    mi_commit.Command = App.CustomRoutedCommand_ExecuteFile;
+                    mi_commit.ToolTip = "Execute TortoiseGitProc.exe /command:commit";
+                    mi_commit.Command = App.CustomRoutedCommand_TortoiseGitProc;
                     mi_commit.CommandParameter = this.repository_path;
 
                     Grid.SetColumn(mi_commit, 2);
