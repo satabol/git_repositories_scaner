@@ -16,7 +16,7 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
 
-namespace git_repositories_watcher
+namespace git_repositories_scaner
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -160,7 +160,7 @@ namespace git_repositories_watcher
         public static String getSettingsFilePath()
         {
             String iniFilePath = null;
-            string exe_file = typeof(git_repositories_watcher.App).Assembly.Location; // http://stackoverflow.com/questions/4764680/how-to-get-the-location-of-the-dll-currently-executing
+            string exe_file = typeof(git_repositories_scaner.App).Assembly.Location; // http://stackoverflow.com/questions/4764680/how-to-get-the-location-of-the-dll-currently-executing
             iniFilePath = System.IO.Path.GetDirectoryName(exe_file) + "\\" + System.IO.Path.GetFileNameWithoutExtension(exe_file) + ".json";
             return iniFilePath;
         }

@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Globalization;
 using System.IO;
 
-namespace git_repositories_watcher
+namespace git_repositories_scaner
 {
     class MainStandalone
     {
@@ -17,7 +17,7 @@ namespace git_repositories_watcher
         public static void Main()
         {
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
-            git_repositories_watcher.App app = new git_repositories_watcher.App();
+            git_repositories_scaner.App app = new git_repositories_scaner.App();
             app.InitializeComponent();
             app.Run();
             //App.Main();

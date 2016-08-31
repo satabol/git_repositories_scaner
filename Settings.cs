@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace git_repositories_watcher
+namespace git_repositories_scaner
 {
     public class Settings
     {
