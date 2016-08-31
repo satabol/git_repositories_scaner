@@ -1,16 +1,20 @@
-# git_repositories_watcher
+# git repositories scaner
 
-Программа висит в трее и показывает контекстное меню со списком каталогов, заданных пользователем в файле git_repositories_watcher.json,
+Программа висит в трее и показывает контекстное меню со списком каталогов, заданных пользователем в файле git_repositories_scaner.json,
 и отображающает статус GIT этих каталогов:
 
 ![](help/01.png)
+
+# Видео описание
+
+![](help/03.gif)
 
 # Краткое описание
 
 Программа состоит из двух файлов: 
 
-- git_repositories_watcher.exe
-- git_repositories_watcher.json (генерируется автоматически после первого запуска).
+- git_repositories_scaner.exe
+- git_repositories_scaner.json (генерируется автоматически после первого запуска).
 
 Для работы программы необходима установка **git** (https://git-scm.com/downloads) и **tortoisegit** (https://tortoisegit.org/download/)
 
