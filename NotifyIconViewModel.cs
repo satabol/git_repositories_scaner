@@ -31,7 +31,6 @@ namespace git_repositories_scaner
                 //return new DelegateCommand { CommandAction = () => { Application.Current.Shutdown(); } };
                 return new DelegateCommand { CommandAction = () => {
                     App.reloadContextMenu();
-
                     //App.NotifyIcon.ContextMenu.Visibility = System.Windows.Visibility.Visible;
                     //MethodInfo mi = typeof(Hardcodet.Wpf.TaskbarNotification.TaskbarIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic);
                     //mi.Invoke(App.NotifyIcon, null);
