@@ -25,7 +25,7 @@
     <!-- the application's NotifyIcon - started from App.xaml.cs. Declares its own view model. -->
     <tb:TaskbarIcon x:Key="NotifyIcon"
                     IconSource="/icons/git_icon.ico"
-                    ToolTipText="Git changes watcher"
+                    ToolTipText="Git changes scaner"
                     ContextMenu="{StaticResource SysTrayMenu}"
                     PopupActivation="LeftClick"
                     >

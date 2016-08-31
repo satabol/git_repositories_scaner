@@ -65,7 +65,7 @@ namespace git_repositories_scaner
                                         //mi_tmp.Background = System.Windows.Media.Brushes.DarkGray;
                                         mi_tmp.IsEnabled = bool_object_exists;
                                         break;
-                                    case "mi_clipboard":
+                                    case "mi_url":
                                         break;
                                 }
                             }
@@ -138,22 +138,38 @@ namespace git_repositories_scaner
                         {
                             mi_grid = (Grid)ct.FindName("mi_grid", _mi);
                         }
-                        /*
-                        MenuItem mi_clipboard = new MenuItem()
+                        //*
+                        BranchCollection bc = repo.Branches;
+                        string url_path = null;
+                        string url_name = null;
+                        foreach (Remote b in repo.Network.Remotes)
                         {
-                            Name = "mi_clipboard"
-                        };
-                        mi_clipboard.Icon = new System.Windows.Controls.Image
+                            url_name = b.Name;
+                            url_path = b.Url;
+                            break; // Использовать только первую ссылку. Остальные пока не знаю как лучше выложить.
+                        }
+                        if (url_name != null)
                         {
-                            Source = new BitmapImage(
-                            new Uri("pack://application:,,,/Icons/Clipboard.ico"))
-                        };
-                        mi_clipboard.ToolTip = "Copy path to clipboard";
-                        mi_clipboard.Command = App.CustomRoutedCommand_CopyTextToClipboard;
-                        mi_clipboard.CommandParameter = _e.FullPath;
-                        Grid.SetColumn(mi_clipboard, 1);
-                        Grid.SetRow(mi_clipboard, 0);
-                        mi_grid.Children.Add(mi_clipboard);
+                            MenuItem mi_url = new MenuItem()
+                            {
+                                Name = "mi_url"
+                            };
+                            mi_url.Icon = new System.Windows.Controls.Image
+                            {
+                                Source = new BitmapImage(
+                                new Uri("pack://application:,,,/icons/url_external.ico"))
+                            };
+                            mi_url.ToolTip = "Goto "+url_name+": "+url_path;
+                            //mi_url.Command = App.CustomRoutedCommand_CopyTextToClipboard;
+                            //mi_url.CommandParameter = _e.FullPath;
+                            mi_url.Click += (sender, args) =>
+                            {
+                                System.Diagnostics.Process.Start(url_path);
+                            };
+                            Grid.SetColumn(mi_url, 1);
+                            Grid.SetRow(mi_url, 0);
+                            mi_grid.Children.Add(mi_url);
+                        }
                         //*/
 
                         //*

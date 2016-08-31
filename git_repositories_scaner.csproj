@@ -161,6 +161,9 @@
   <ItemGroup>
     <Resource Include="icons\delete_icon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\url_external.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>
