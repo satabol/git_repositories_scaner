@@ -113,7 +113,20 @@ namespace git_repositories_scaner
             startInfo.WorkingDirectory = repository_path;
             startInfo.FileName = "TortoiseGitProc.exe";
             startInfo.Arguments = "/command:commit";
-            Process.Start(startInfo); //, "/command:commit");
+            try
+            {
+                Process.Start(startInfo); //, "/command:commit");
+            }
+            catch(Exception _ex)
+            {
+                //MessageBox.Show("Ошибка запуска программы " + startInfo.FileName + ":\n" + _ex.Message);
+                TrayPopupMessage popup = new TrayPopupMessage("Ошибка запуска программы " + startInfo.FileName + ":\n" + _ex.Message, "Error", App.NotifyIcon, TrayPopupMessage.ControlButtons.Close);
+                popup.MouseDown += (_sender, args) =>
+                {
+                    App.NotifyIcon.CustomBalloon.IsOpen = false;
+                };
+                App.NotifyIcon.ShowCustomBalloon(popup, PopupAnimation.Fade, 4000);
+            }
             //*/
         }
 
