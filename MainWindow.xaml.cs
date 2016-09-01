@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace git_repositories_scaner
+namespace git_repositories_scanner
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

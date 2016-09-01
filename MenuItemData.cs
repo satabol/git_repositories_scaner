@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
 
-namespace git_repositories_scaner
+namespace git_repositories_scanner
 {
     public class MenuItemData
     {

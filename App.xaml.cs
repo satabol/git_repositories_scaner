@@ -8,6 +8,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +17,7 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
 
-namespace git_repositories_scaner
+namespace git_repositories_scanner
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -173,10 +174,55 @@ namespace git_repositories_scaner
         public static String getSettingsFilePath()
         {
             String iniFilePath = null;
-            string exe_file = typeof(git_repositories_scaner.App).Assembly.Location; // http://stackoverflow.com/questions/4764680/how-to-get-the-location-of-the-dll-currently-executing
+            string exe_file = typeof(git_repositories_scanner.App).Assembly.Location; // http://stackoverflow.com/questions/4764680/how-to-get-the-location-of-the-dll-currently-executing
             iniFilePath = System.IO.Path.GetDirectoryName(exe_file) + "\\" + System.IO.Path.GetFileNameWithoutExtension(exe_file) + ".json";
             return iniFilePath;
         }
+
+        // Этот набор нужен, чтобы вывести какое-либо окно на передний план.
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool IsIconic(IntPtr hWnd);
+        [DllImport("user32.dll")]
+        private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, int dwExtraInfo);
+        [DllImport("user32.dll")]
+        private static extern int ShowWindow(IntPtr hWnd, uint Msg);
+
+        // http://stackoverflow.com/questions/10740346/setforegroundwindow-only-working-while-visual-studio-is-open?answertab=votes#tab-top
+        private const int ALT = 0xA4;
+        private const uint Restore = 9;
+        private const int EXTENDEDKEY = 0x1;
+        private const int KEYUP = 0x2;
+
+        // Сделать окно по указанному handle главным и в фокусе. Это нетривиальная задача. 
+        // Вот этот код работает в 99% случаев, но ооочень редко всё-таки иногда даёт сбой.
+        // Как добиться 100% пока не знаю.
+        public static void ActivateWindow(IntPtr mainWindowHandle)
+        {
+            //check if already has focus
+            if (mainWindowHandle == GetForegroundWindow()) return;
+
+            //check if window is minimized
+            if (IsIconic(mainWindowHandle))
+            {
+                ShowWindow(mainWindowHandle, Restore);
+            }
+
+            // Simulate a key press
+            keybd_event((byte)ALT, 0x45, EXTENDEDKEY | 0, 0);
+
+            //SetForegroundWindow(mainWindowHandle);
+
+            // Simulate a key release
+            keybd_event((byte)ALT, 0x45, EXTENDEDKEY | KEYUP, 0);
+
+            SetForegroundWindow(mainWindowHandle);
+        }
+
 
     }
 }

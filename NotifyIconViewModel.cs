@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Hardcodet.Wpf.TaskbarNotification;
 using System.Windows.Controls.Primitives;
+using System.Windows.Interop;
 
-namespace git_repositories_scaner
+namespace git_repositories_scanner
 {
     class NotifyIconViewModel : INotifyPropertyChanged
     {
@@ -45,6 +46,24 @@ namespace git_repositories_scaner
                 //return new DelegateCommand { CommandAction = () => { Application.Current.Shutdown(); } };
                 string settings_file_path = App.getSettingsFilePath();
                 return new DelegateCommand { CommandAction = () => { App.gotoPathByWindowsExplorer(settings_file_path); } };
+            }
+        }
+
+        public ICommand OpenAbout
+        {
+            get
+            {
+                return new DelegateCommand
+                {
+                    //CanExecuteFunc = () => Application.Current.MainWindow == null,
+                    CommandAction = () =>
+                    {
+                        About window = new About();
+                        window.Show();
+                        App.ActivateWindow(new WindowInteropHelper(window).Handle);
+                    },
+                    CanExecuteFunc = () => true
+                };
             }
         }
 
