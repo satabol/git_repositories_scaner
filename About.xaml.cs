@@ -15,27 +15,22 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace git_repositories_scanner
-{
+namespace git_repositories_scanner {
     /// <summary>
     /// Interaction logic for About.xaml
     /// </summary>
-    public partial class About : Window
-    {
-        public About()
-        {
+    public partial class About : Window {
+        public About() {
             InitializeComponent();
             this.text_version.Text = "Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             this.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
+        private void Button_Click( object sender, RoutedEventArgs e ) {
             this.Close();
         }
 
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
+        private void Hyperlink_RequestNavigate( object sender, RequestNavigateEventArgs e ) {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }

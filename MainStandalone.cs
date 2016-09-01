@@ -4,18 +4,15 @@ using System.Reflection;
 using System.Globalization;
 using System.IO;
 
-namespace git_repositories_scanner
-{
-    class MainStandalone
-    {
+namespace git_repositories_scanner {
+    class MainStandalone {
         /**
          * Методы для запуска приложения после сборки в один файл:
          */
         static Dictionary<string, Assembly> assembliesDictionary = new Dictionary<string, Assembly>();
 
         [STAThread]
-        public static void Main()
-        {
+        public static void Main() {
             AppDomain.CurrentDomain.AssemblyResolve += OnResolveAssembly;
             git_repositories_scanner.App app = new git_repositories_scanner.App();
             app.InitializeComponent();
@@ -23,29 +20,22 @@ namespace git_repositories_scanner
             //App.Main();
         }
 
-        private static Assembly OnResolveAssembly(object sender, ResolveEventArgs args)
-        {
+        private static Assembly OnResolveAssembly( object sender, ResolveEventArgs args ) {
             AssemblyName assemblyName = new AssemblyName(args.Name);
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
             string path = string.Format("{0}.dll", assemblyName.Name);
 
-            if (assemblyName.CultureInfo.Equals(CultureInfo.InvariantCulture) == false)
-            {
+            if (assemblyName.CultureInfo.Equals(CultureInfo.InvariantCulture) == false) {
                 path = String.Format(@"{0}\{1}", assemblyName.CultureInfo, path);
             }
 
-            if (!assembliesDictionary.ContainsKey(path))
-            {
-                using (Stream assemblyStream = executingAssembly.GetManifestResourceStream(path))
-                {
-                    if (assemblyStream != null)
-                    {
+            if (!assembliesDictionary.ContainsKey(path)) {
+                using (Stream assemblyStream = executingAssembly.GetManifestResourceStream(path)) {
+                    if (assemblyStream != null) {
                         var assemblyRawBytes = new byte[assemblyStream.Length];
                         assemblyStream.Read(assemblyRawBytes, 0, assemblyRawBytes.Length);
-                        using (var pdbStream = executingAssembly.GetManifestResourceStream(Path.ChangeExtension(path, "pdb")))
-                        {
-                            if (pdbStream != null)
-                            {
+                        using (var pdbStream = executingAssembly.GetManifestResourceStream(Path.ChangeExtension(path, "pdb"))) {
+                            if (pdbStream != null) {
                                 var pdbData = new Byte[pdbStream.Length];
                                 pdbStream.Read(pdbData, 0, pdbData.Length);
                                 var assembly = Assembly.Load(assemblyRawBytes, pdbData);
@@ -55,8 +45,7 @@ namespace git_repositories_scanner
                         }
                         assembliesDictionary.Add(path, Assembly.Load(assemblyRawBytes));
                     }
-                    else
-                    {
+                    else {
                         assembliesDictionary.Add(path, null);
                     }
                 }
