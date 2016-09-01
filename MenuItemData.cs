@@ -124,6 +124,7 @@ namespace git_repositories_scanner
                                 <Grid x:Name='mi_grid'>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width='*'/>
+                                        <ColumnDefinition Width='100'/>
                                         <ColumnDefinition Width='20'/>
                                         <ColumnDefinition Width='20'/>
                                     </Grid.ColumnDefinitions>
@@ -140,8 +141,27 @@ namespace git_repositories_scanner
                         }
                         //*
                         BranchCollection bc = repo.Branches;
+                        
                         string url_path = null;
                         string url_name = null;
+                        string branch_friendly_name = repo.Head.FriendlyName;
+
+                        {
+                            MenuItem mi_friendly_name = new MenuItem() {
+                                Name = "mi_friendly_name"
+                            };
+                            mi_friendly_name.Header = "" + branch_friendly_name + "";
+                            mi_friendly_name.ToolTip = "Branch name: [" + branch_friendly_name + "]";
+                            // Как сдвинуть содержимое меню влево, чтобы не было видно иконки:
+                            // http://serv-japp.stpr.ru:27080/images/ImageCRUD?_id=57c86a8e86b57c9b62686419
+                            // https://social.msdn.microsoft.com/Forums/vstudio/ru-RU/0465c6bf-241c-4cf5-b772-3d1a9bbc16b9/remove-icon-space-in-menuitem?forum=wpf
+                            mi_friendly_name.Padding = new System.Windows.Thickness(-30,0,-30,0);  
+                            Grid.SetColumn(mi_friendly_name, 1);
+                            Grid.SetRow(mi_friendly_name, 0);
+                            mi_grid.Children.Add(mi_friendly_name);
+                        }
+
+                        //mi.Header = ShortText(repository_path+" ["+branch_friendly_name+"]");
                         foreach (Remote b in repo.Network.Remotes)
                         {
                             url_name = b.Name;
@@ -166,7 +186,7 @@ namespace git_repositories_scanner
                             {
                                 System.Diagnostics.Process.Start(url_path);
                             };
-                            Grid.SetColumn(mi_url, 1);
+                            Grid.SetColumn(mi_url, 2);
                             Grid.SetRow(mi_url, 0);
                             mi_grid.Children.Add(mi_url);
                         }
@@ -186,7 +206,7 @@ namespace git_repositories_scanner
                         mi_commit.Command = App.CustomRoutedCommand_TortoiseGitProc;
                         mi_commit.CommandParameter = this.repository_path;
 
-                        Grid.SetColumn(mi_commit, 2);
+                        Grid.SetColumn(mi_commit, 3);
                         Grid.SetRow(mi_commit, 0);
                         mi_grid.Children.Add(mi_commit);
                         //*/
