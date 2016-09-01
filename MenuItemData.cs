@@ -110,7 +110,8 @@ namespace git_repositories_scanner
                         mi.Icon = new System.Windows.Controls.Image { Source = new BitmapImage(new Uri("pack://application:,,,/icons/ModifiedIcon.ico", UriKind.Absolute)) };
                     }
 
-                    mi.ToolTip = "open path";
+                    mi.ToolTip = "open path\nCommit message:"+
+                    repo.Commits.First().Message;
 
                     {
                         // Так определять Grid гораздо проще: http://stackoverflow.com/questions/5755455/how-to-set-control-template-in-code
